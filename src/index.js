@@ -5,43 +5,34 @@ import { setCheckboxListener, checkCompleted } from '../modules/status.js';
 
 const newTaskInput = document.querySelector('#new-task');
 const element = document.querySelector('#todolist');
-let toDoList = [];
 
 const getToDoList = () => {
-  toDoList = JSON.parse(localStorage.getItem('to_do_list'));
-  if (toDoList === null) {
-    return [];
-  }
+  const storage = JSON.parse(localStorage.getItem('to_do_list'));
+  const toDoList = (storage === null) ? [] : storage;
   return toDoList;
 };
 
 const printList = () => {
   const list = getToDoList();
-  let tasks = '';
-  for (let i = 1; i <= list.length; i += 1) {
-    for (let j = 0; j < list.length; j += 1) {
-      const task = list[j];
-      if (task.index === i) {
-        tasks += `
-        <li id = "${task.index}" class="item">
-          <label>
-            <input class="checked" type="checkbox" name="chk${task.index}" id="chk${task.index}">
-            <input class="edit borderless fit hidden" type="text" name="edit${task.index}" id="edit${task.index}" placeholder="Edit task...">
-            <p id="task${task.index}">${task.description}</p>
-          </label>
-          <div class="edit-manager flex hidden">
-            <button class="edit-confirm">Confirm</button>
-            <button class="edit-cancel">Cancel</button>
-          </div>
-          <div class="list-editor flex">
-            <button class="edit-task">edit</button>
-            <button class="delete-task">Del</button>
-          </div>
-        </li>
-      `;
-      }
-    }
-  }
+  let tasks = (list.length > 0) ? list.sort((a, b) => ((a.index > b.index) ? 1 : -1)) : list;
+  tasks = tasks.map((task) => `
+    <li id = "${task.index}" class="item">
+      <label>
+        <input class="checked" type="checkbox" name="chk${task.index}" id="chk${task.index}">
+        <input class="edit borderless fit hidden" type="text" name="edit${task.index}" id="edit${task.index}" placeholder="Edit task...">
+        <p id="task${task.index}">${task.description}</p>
+      </label>
+      <div class="edit-manager flex hidden">
+        <button class="edit-confirm">Confirm</button>
+        <button class="edit-cancel">Cancel</button>
+      </div>
+      <div class="list-editor flex">
+        <button class="edit-task">edit</button>
+        <button class="delete-task">Del</button>
+      </div>
+    </li>
+  `);
+  tasks = (tasks.length > 1) ? tasks.reduce((prev, task) => prev + task) : tasks;
 
   element.innerHTML = tasks;
 
@@ -63,8 +54,8 @@ const printList = () => {
   };
 
   // Start editting
-  document.querySelectorAll('.edit-task').forEach((etb) => {
-    etb.addEventListener('click', (e) => {
+  document.querySelectorAll('.edit-task').forEach((editButton) => {
+    editButton.addEventListener('click', (e) => {
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
       document.getElementById(`edit${taskIndex}`).value = document.querySelector(`#task${taskIndex}`).innerHTML;
       const taskElement = document.getElementById(`${taskIndex}`);
@@ -85,13 +76,13 @@ const printList = () => {
   });
 
   // Confirm task edition
-  document.querySelectorAll('.edit-confirm').forEach((ec) => {
-    ec.addEventListener('click', confirmEditTask);
+  document.querySelectorAll('.edit-confirm').forEach((editConfirm) => {
+    editConfirm.addEventListener('click', confirmEditTask);
   });
 
   // Cancel task etition
-  document.querySelectorAll('.edit-cancel').forEach((ec) => {
-    ec.addEventListener('click', (e) => {
+  document.querySelectorAll('.edit-cancel').forEach((editCancel) => {
+    editCancel.addEventListener('click', (e) => {
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
       const taskElement = document.getElementById(`${taskIndex}`);
 
@@ -106,8 +97,8 @@ const printList = () => {
   });
 
   // delete selected task
-  document.querySelectorAll('.delete-task').forEach((dtb) => {
-    dtb.addEventListener('click', (e) => {
+  document.querySelectorAll('.delete-task').forEach((deleteButton) => {
+    deleteButton.addEventListener('click', (e) => {
       const task = new Task();
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
       task.Delete(taskIndex);
@@ -125,8 +116,7 @@ if (getToDoList() !== []) {
 
 const addNewTask = () => {
   if (newTaskInput.value !== '') {
-    toDoList = getToDoList();
-    const newIndex = toDoList.length + 1;
+    const newIndex = getToDoList().length + 1;
     const task = new Task(newTaskInput.value, newIndex);
     task.Add();
     newTaskInput.value = '';

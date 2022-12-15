@@ -6,11 +6,7 @@ class Status {
 
   Set = () => {
     const tasks = JSON.parse(localStorage.getItem('to_do_list'));
-    tasks.forEach((task) => {
-      if (task.index === this.index) {
-        task.completed = this.completed;
-      }
-    });
+    tasks[this.index - 1].completed = this.completed;
     localStorage.setItem('to_do_list', JSON.stringify(tasks));
   };
 }
