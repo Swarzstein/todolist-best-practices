@@ -19,7 +19,7 @@ const printList = () => {
     <li id = "${task.index}" class="item">
       <label>
         <input class="checked" type="checkbox" name="chk${task.index}" id="chk${task.index}">
-        <input class="edit borderless fit hidden" type="text" name="edit${task.index}" id="edit${task.index}" placeholder="Edit task...">
+        <input required class="edit borderless fit hidden" type="text" name="edit${task.index}" id="edit${task.index}" placeholder="Edit task...">
         <p id="task${task.index}">${task.description}</p>
       </label>
       <div class="edit-manager flex hidden">
@@ -68,9 +68,7 @@ const printList = () => {
 
       editTask.addEventListener('keypress', (e) => {
         const keypressed = (editTask) ? e.keyCode : e.which;
-        if (keypressed === 13) {
-          if (editTask.value !== '') { confirmEditTask(e); }
-        }
+        if (keypressed === 13) confirmEditTask(e);
       });
     });
   });
@@ -128,9 +126,7 @@ const addNewTask = () => {
 document.querySelector('#add').addEventListener('click', addNewTask);
 newTaskInput.addEventListener('keypress', (e) => {
   const keypressed = (newTaskInput) ? e.keyCode : e.which;
-  if (keypressed === 13) {
-    if (newTaskInput.value !== '') { addNewTask(); }
-  }
+  if (keypressed === 13) addNewTask();
 });
 
 // Clear all selected
