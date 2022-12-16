@@ -7,7 +7,7 @@ class Task {
 
   Add = () => {
     const storage = JSON.parse(localStorage.getItem('to_do_list'));
-    const tasks = (storage !== null) ? storage : [];
+    const tasks = storage !== null ? storage : [];
     if (this.description !== '') {
       tasks.push({
         description: this.description,
@@ -20,7 +20,7 @@ class Task {
 
   Delete = (index) => {
     let tasks = JSON.parse(localStorage.getItem('to_do_list'));
-    tasks = tasks.filter((task) => (task.index === index));
+    tasks = tasks.filter((task) => task.index === index);
     tasks.forEach((task) => {
       if (task.index > index) {
         task.index -= 1;
