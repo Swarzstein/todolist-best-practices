@@ -1,4 +1,4 @@
-class Status {
+export default class Status {
   constructor(completed, index) {
     this.completed = completed;
     this.index = index;
@@ -41,7 +41,7 @@ const checkCompleted = () => {
         document.querySelector(`#task${task.index}`).classList.add('completed');
         try {
           document.getElementById(`chk${task.index}`).checked = true;
-        // eslint-disable-next-line no-empty
+          // eslint-disable-next-line no-empty
         } catch (error) {}
       }
     });
