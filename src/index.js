@@ -18,8 +18,7 @@ const getToDoList = () => {
 
 const printList = () => {
   const list = getToDoList();
-  let tasks =
-    list.length > 0 ? list.sort((a, b) => (a.index > b.index ? 1 : -1)) : list;
+  let tasks = list.length > 0 ? list.sort((a, b) => (a.index > b.index ? 1 : -1)) : list;
   tasks = tasks.map(
     (task) => `
     <li id = "${task.index}" class="item">
@@ -36,8 +35,7 @@ const printList = () => {
         <button class="edit-task">edit</button>
         <button class="delete-task">Del</button>
       </div>
-    </li>
-  `
+    </li>`,
   );
   tasks = tasks.length > 1 ? tasks.reduce((prev, task) => prev + task) : tasks;
 
@@ -64,8 +62,7 @@ const printList = () => {
   document.querySelectorAll('.edit-task').forEach((editButton) => {
     editButton.addEventListener('click', (e) => {
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
-      document.getElementById(`edit${taskIndex}`).value =
-        document.querySelector(`#task${taskIndex}`).innerHTML;
+      document.getElementById(`edit${taskIndex}`).value = document.querySelector(`#task${taskIndex}`).innerHTML;
       const taskElement = document.getElementById(`${taskIndex}`);
       const editTask = document.querySelector(`#edit${taskIndex}`);
       editTask.classList.remove('hidden');

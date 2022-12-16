@@ -3,7 +3,6 @@
  */
 
 import Status, { deleteCompleted } from '../modules/status.js';
-import Task from '../modules/task.js';
 
 localStorage.setItem(
   'to_do_list',
@@ -11,7 +10,7 @@ localStorage.setItem(
     { description: 'clean the room', completed: false, index: 1 },
     { description: 'clean the kitchen', completed: false, index: 2 },
     { description: 'make dinner', completed: false, index: 3 },
-  ])
+  ]),
 );
 
 describe('Update Tasks status', () => {
