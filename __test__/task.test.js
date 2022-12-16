@@ -59,13 +59,37 @@ describe('Add Task', () => {
     expect(list).toHaveLength(result.length);
   });
 });
+
+describe('Edit Task', () => {
+  test('first task', () => {
+    const task = new Task('wash the car', 1);
+    task.Edit();
+    const result = JSON.parse(localStorage.getItem('to_do_list'));
+    expect(result).toEqual([
+      { description: 'wash the car', completed: false, index: 1 },
+      { description: 'clean the kitchen', completed: false, index: 2 },
+      { description: 'make dinner', completed: false, index: 3 },
+    ]);
+  });
+  test('Second task', () => {
+    const task = new Task('walk the dog', 2);
+    task.Edit();
+    const result = JSON.parse(localStorage.getItem('to_do_list'));
+    expect(result).toEqual([
+      { description: 'wash the car', completed: false, index: 1 },
+      { description: 'walk the dog', completed: false, index: 2 },
+      { description: 'make dinner', completed: false, index: 3 },
+    ]);
+  });
+});
+
 describe('Delete Task', () => {
   test('Second task', () => {
     const task = new Task();
     task.Delete(2);
     const result = JSON.parse(localStorage.getItem('to_do_list'));
     expect(result).toEqual([
-      { description: 'clean the room', completed: false, index: 1 },
+      { description: 'wash the car', completed: false, index: 1 },
       { description: 'make dinner', completed: false, index: 2 },
     ]);
 
