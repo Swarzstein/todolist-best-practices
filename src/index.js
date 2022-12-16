@@ -1,21 +1,27 @@
 import './style.css';
 import Task from '../modules/task.js';
 
-import { setCheckboxListener, checkCompleted } from '../modules/status.js';
+import {
+  setCheckboxListener,
+  checkCompleted,
+  deleteCompleted,
+} from '../modules/status.js';
 
 const newTaskInput = document.querySelector('#new-task');
 const element = document.querySelector('#todolist');
 
 const getToDoList = () => {
   const storage = JSON.parse(localStorage.getItem('to_do_list'));
-  const toDoList = (storage === null) ? [] : storage;
+  const toDoList = storage === null ? [] : storage;
   return toDoList;
 };
 
 const printList = () => {
   const list = getToDoList();
-  let tasks = (list.length > 0) ? list.sort((a, b) => ((a.index > b.index) ? 1 : -1)) : list;
-  tasks = tasks.map((task) => `
+  let tasks =
+    list.length > 0 ? list.sort((a, b) => (a.index > b.index ? 1 : -1)) : list;
+  tasks = tasks.map(
+    (task) => `
     <li id = "${task.index}" class="item">
       <label>
         <input class="checked" type="checkbox" name="chk${task.index}" id="chk${task.index}">
@@ -31,8 +37,9 @@ const printList = () => {
         <button class="delete-task">Del</button>
       </div>
     </li>
-  `);
-  tasks = (tasks.length > 1) ? tasks.reduce((prev, task) => prev + task) : tasks;
+  `
+  );
+  tasks = tasks.length > 1 ? tasks.reduce((prev, task) => prev + task) : tasks;
 
   element.innerHTML = tasks;
 
@@ -57,7 +64,8 @@ const printList = () => {
   document.querySelectorAll('.edit-task').forEach((editButton) => {
     editButton.addEventListener('click', (e) => {
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
-      document.getElementById(`edit${taskIndex}`).value = document.querySelector(`#task${taskIndex}`).innerHTML;
+      document.getElementById(`edit${taskIndex}`).value =
+        document.querySelector(`#task${taskIndex}`).innerHTML;
       const taskElement = document.getElementById(`${taskIndex}`);
       const editTask = document.querySelector(`#edit${taskIndex}`);
       editTask.classList.remove('hidden');
@@ -67,7 +75,7 @@ const printList = () => {
       taskElement.querySelector('.list-editor').classList.add('hidden');
 
       editTask.addEventListener('keypress', (e) => {
-        const keypressed = (editTask) ? e.keyCode : e.which;
+        const keypressed = editTask ? e.keyCode : e.which;
         if (keypressed === 13) confirmEditTask(e);
       });
     });
@@ -100,6 +108,7 @@ const printList = () => {
       const task = new Task();
       const taskIndex = parseInt(e.target.parentNode.parentNode.id, 10);
       task.Delete(taskIndex);
+
       printList();
     });
   });
@@ -125,29 +134,13 @@ const addNewTask = () => {
 // Add new Task
 document.querySelector('#add').addEventListener('click', addNewTask);
 newTaskInput.addEventListener('keypress', (e) => {
-  const keypressed = (newTaskInput) ? e.keyCode : e.which;
+  const keypressed = newTaskInput ? e.keyCode : e.which;
   if (keypressed === 13) addNewTask();
 });
 
 // Clear all selected
 document.querySelector('#clear-list').addEventListener('click', () => {
-  let tasks = JSON.parse(localStorage.getItem('to_do_list'));
-  const checked = [];
-  tasks = tasks.filter((task) => {
-    if (task.completed === true) {
-      checked.push(task.index);
-      return false;
-    }
-    return true;
-  });
-  for (let i = checked.length - 1; i >= 0; i -= 1) {
-    tasks.forEach((task) => {
-      if (task.index > checked[i]) {
-        task.index -= 1;
-      }
-    });
-  }
-  localStorage.setItem('to_do_list', JSON.stringify(tasks));
+  deleteCompleted();
   printList();
   checkCompleted();
 });

@@ -48,4 +48,24 @@ const checkCompleted = () => {
   }
 };
 
-export { setCheckboxListener, checkCompleted };
+const deleteCompleted = () => {
+  let tasks = JSON.parse(localStorage.getItem('to_do_list'));
+  const checked = [];
+  tasks = tasks.filter((task) => {
+    if (task.completed === true) {
+      checked.push(task.index);
+      return false;
+    }
+    return true;
+  });
+  for (let i = checked.length - 1; i >= 0; i -= 1) {
+    tasks.forEach((task) => {
+      if (task.index > checked[i]) {
+        task.index -= 1;
+      }
+    });
+  }
+  localStorage.setItem('to_do_list', JSON.stringify(tasks));
+};
+
+export { setCheckboxListener, checkCompleted, deleteCompleted };
