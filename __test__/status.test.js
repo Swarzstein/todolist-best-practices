@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import Status from '../modules/status.js';
+import Status, { deleteCompleted } from '../modules/status.js';
 import Task from '../modules/task.js';
 
 localStorage.setItem(
@@ -49,4 +49,19 @@ describe('Update Tasks status', () => {
     const list = document.querySelectorAll('.item');
     expect(list).toHaveLength(result.length);
   });
+});
+
+test('Delete Completed tasks', () => {
+  deleteCompleted();
+  const result = JSON.parse(localStorage.getItem('to_do_list'));
+  expect(result).toEqual([
+    { description: 'clean the room', completed: false, index: 1 },
+  ]);
+  let generatedHTML = '';
+  result.forEach((element) => {
+    generatedHTML += `<li id="${element.index}"  class="item"></li>`;
+  });
+  document.body.innerHTML = `<div><ul id='todolist'>${generatedHTML}</ul></div>`;
+  const list = document.querySelectorAll('.item');
+  expect(list).toHaveLength(result.length);
 });
